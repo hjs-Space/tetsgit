@@ -1,0 +1,57 @@
+Git@OSC注册帐号
+工具：git bash
+git GUI
+
+
+
+public void updateStudent(String sql,String []paras) {
+		boolean b=true;
+		Connection ct=null;
+		PreparedStatement ps=null;
+		ResultSet rs=null;
+		String URL = "jdbc:mysql://localhost:3306/la";
+		String user="root";
+		String psw="";
+		String driver="com.mysql.jdbc.Driver";
+		System.out.print("点击添加学生");
+		//连接数据库
+		//连接数据库，判断用户是否合法
+		try {
+			//1、加载驱动
+			Class.forName(driver);
+			//2、得到连接
+			ct = DriverManager.getConnection(URL,user,psw);
+			//获得语句对象
+			ps=ct.prepareStatement(sql);
+			
+			//3、给？赋值
+			for(int i=0;i<paras.length;i++)
+			{
+				ps.setString(i+1, paras[i]);
+			}	
+			//4、执行操作,如果一条都没有更新完
+			if(ps.executeUpdate()!=-1)
+			{
+				b=false;
+			}
+			
+			
+		} catch (ClassNotFoundException e1) {
+			// TODO Auto-generated catch block
+			b=false;
+			e1.printStackTrace();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}finally{
+			//关闭
+			try {
+				if(rs!=null) rs.close();
+				if(ps!=null) ps.close();
+				if(ct!=null) ct.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}	
+	}
